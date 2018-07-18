@@ -13,7 +13,7 @@ class BooksShelf extends React.Component {
                                 <Book url={book.url}
                                     title={book.title} authors={book.authors} />
                             </li>
-                        ))};
+                        ))}
                     </ol>
                 </div>
             </div>
