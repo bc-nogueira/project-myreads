@@ -6,7 +6,8 @@ class Book extends React.Component {
         return (
             <div className="book">
                 <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.url})` }}></div>
+                    <div className="book-cover" style={{ width: 128, height: 193, 
+                            backgroundImage: `url(${this.props.imageLinks !== undefined ? this.props.book.imageLinks.thumbnail : ''})` }}></div>
                     <BookChanger />
                 </div>
                 <div className="book-title">{this.props.title}</div>
