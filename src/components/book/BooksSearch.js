@@ -1,8 +1,35 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import escapeRegExp from 'escape-string-regexp'
+import sortBy from 'sort-by'
 
 class BooksSearch extends React.Component {
+    state = {
+        query: ''
+    }
+
+    updateQuery = (query) => {
+        this.setState({ query: query.trim() })
+    }
+
+    clearQuery= () => {
+        this.setState({ query: '' })
+    }
+
     render() {
+        const { books } = this.props
+        const { query } = this.state
+
+        let showingBooks
+        if (query) {
+            const match = new RegExp(escapeRegExp(query), 'i')
+            showingBooks = books.filter((book) => match.test(book.title))
+        } else {
+            showingBooks = books
+        }
+
+        showingBooks.sort(sortBy('title'))
+
         return(
             <div className="search-books">
                 <div className="search-books-bar">
@@ -16,12 +43,25 @@ class BooksSearch extends React.Component {
                         However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                         you don't find a specific author or title. Every search is limited by search terms.
                         */}
-                        <input type="text" placeholder="Search by title or author"/>
+                        <input type="text" placeholder="Search by title or author" 
+                            value={query} onChange={(event) => this.updateQuery(event.target.value)} />
 
                     </div>
                 </div>
                     <div className="search-books-results">
-                    <ol className="books-grid"></ol>
+                    <ol className="books-grid">
+                        {showingBooks.map((book) => (
+                            <li key={book.id}>
+                                <div className="book-image" style={{
+                                    backgroundImage: `url(${book.imageLinks.thumbnail})`
+                                }} />
+                                <div className="contact-details">
+                                    {book.title}<br/>
+                                    {book.authors}
+                                </div>
+                            </li>
+                        ))}
+                    </ol>
                 </div>
             </div>
         )
