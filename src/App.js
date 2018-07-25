@@ -14,11 +14,19 @@ class BooksApp extends React.Component {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
     })
-}
+  }
+
+  moveBook(book, shelf) {
+    if (book.shelf !== shelf) {
+      BooksAPI.update(book, shelf).then((books) => {
+        this.setState({ books })
+      })
+    } else {
+      alert("O livro já se encontra nesta prateleira!")
+    }
+  }
 
   render() {
-    console.log(this.state.books)
-
     return (
       <div className="app">
         <Route exact path="/" render={() => (
@@ -26,6 +34,7 @@ class BooksApp extends React.Component {
             booksReading={this.state.books.filter(book => book.shelf === "currentlyReading")}
             booksWantToRead={this.state.books.filter(book => book.shelf === "wantToRead")}
             booksRead={this.state.books.filter(book => book.shelf === "read")}
+            moveBook={this.moveBook}
           />
         )}/>
         <Route path="/search" render={({ history }) => (
