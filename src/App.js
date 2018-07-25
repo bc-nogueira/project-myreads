@@ -18,8 +18,12 @@ class BooksApp extends React.Component {
 
   moveBook(book, shelf) {
     if (book.shelf !== shelf) {
-      BooksAPI.update(book, shelf).then((books) => {
-        this.setState({ books })
+      book.shelf = shelf
+      BooksAPI.update(book, shelf).then(() => {
+        // this.setState({ books })
+        this.setState((state) => ({
+          books: state.books.filter((b) => b.id !== book.id).concat([book])
+        }))
       })
     } else {
       alert("O livro já se encontra nesta prateleira!")
