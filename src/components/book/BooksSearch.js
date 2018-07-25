@@ -48,20 +48,24 @@ class BooksSearch extends React.Component {
 
                     </div>
                 </div>
-                    <div className="search-books-results">
-                    <ol className="books-grid">
+                <div className="search-books-results container">
+                    <div className="row">
                         {showingBooks.map((book) => (
-                            <li key={book.id}>
-                                <div className="book-image" style={{
-                                    backgroundImage: `url(${book.imageLinks.thumbnail})`
-                                }} />
-                                <div className="contact-details">
-                                    {book.title}<br/>
-                                    {book.authors}
+                            <div key={book.id} className="col-sm-12 col-md-5 offset-md-1 mt-4 card">
+                                <div className="card-body">
+                                    <div className="row">
+                                        <div className="col-3">
+                                            <img src={book.imageLinks.thumbnail} alt="" className="book-cover-search"/>
+                                        </div>
+                                        <div className="col-9">
+                                            <h5 class="card-title">{book.title}</h5>
+                                            <h6 class="card-subtitle mt-2 text-muted">{book.authors}</h6>
+                                        </div>
+                                    </div>
                                 </div>
-                            </li>
+                            </div>
                         ))}
-                    </ol>
+                    </div>
                 </div>
             </div>
         )

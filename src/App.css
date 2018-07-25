@@ -172,3 +172,8 @@ body, .app {
   text-align: center;
   font-size: 0.8em;
 }
+
+.book-cover-search {
+  height: 110px;
+  width: 78px;
+}
