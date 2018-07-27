@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
-import Bookshelf from './Bookshelf'
+import BookShelf from './BookShelf'
 
 class BooksList extends React.Component {
     state = {
@@ -35,11 +35,11 @@ class BooksList extends React.Component {
                 </div>
                 <div className="list-books-content">
                     <div>
-                        <Bookshelf title="Currently Reading" moveBook={this.moveBook} 
+                        <BookShelf title="Currently Reading" moveBook={this.moveBook} 
                             books={this.state.books.filter(book => book.shelf === "currentlyReading")} />
-                        <Bookshelf title="Want to Read" moveBook={this.moveBook}  
+                        <BookShelf title="Want to Read" moveBook={this.moveBook}  
                             books={this.state.books.filter(book => book.shelf === "wantToRead")} />
-                        <Bookshelf title="Read" moveBook={this.moveBook}  
+                        <BookShelf title="Read" moveBook={this.moveBook}  
                             books={this.state.books.filter(book => book.shelf === "read")} /> />
                     </div>
                 </div>
