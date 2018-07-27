@@ -1,9 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
 import * as BooksAPI from './BooksAPI'
-import BookChanger from './BookChanger'
+import Book from './Book'
 
 class BooksSearch extends React.Component {
     state = {
@@ -13,9 +12,9 @@ class BooksSearch extends React.Component {
     }
     
     searchBooks = (string) => {
-        const query = string.trim()
-        this.setState({ query: query })
-        
+        const { query } = this.state
+        this.setState({ query: string })
+
         if (query) {
             BooksAPI.search(query, 20).then((books) => {
                 books.length > 0 ? 
@@ -29,6 +28,19 @@ class BooksSearch extends React.Component {
 
     clearQuery= () => {
         this.searchBooks("")
+    }
+
+    moveBook = (book, shelf) => {
+        if (book.shelf !== shelf) {
+            book.shelf = shelf
+            BooksAPI.update(book, shelf).then(() => {
+                this.setState((state) => ({
+                    books: this.state.books.filter((b) => b.id !== book.id).concat([book])
+                }))
+            })
+        } else {
+            alert("O livro já se encontra nesta prateleira!")
+        }
     }
 
     render() {
@@ -53,29 +65,16 @@ class BooksSearch extends React.Component {
                     </div>
                     <div className="clear-search" onClick={this.clearQuery}></div>
                 </div>
-                <div className="search-books-results container-fluid">
+                <div className="search-books-results">
                     {books.length > 0 && (
-                        <div className="row justify-content-center">
-                            {books.map((book) => (
-                                <div key={book.id} className="col-md-12 col-lg-5 mr-4 mt-4 card">
-                                    <div className="card-body">
-                                        <div className="row">
-                                            <div className="col-3">
-                                                <img alt="" className="book-cover-search"
-                                                    src={book.imageLinks && book.imageLinks !== undefined ? book.imageLinks.thumbnail : ''} />
-                                            </div>
-                                            <div className="col-9">
-                                                <h5 className="card-title">{book.title}</h5>
-                                                <div className="row">
-                                                    <h6 className="card-subtitle mt-2 text-muted col-8">{book.authors}</h6>
-
-                                                    <BookChanger className="col-4" book={book} moveBook={this.props.moveBook} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
+                        <div className="bookshelf-books">
+                            <ol className="books-grid">
+                                {books.map((book) => (
+                                    <li key={book.id}>
+                                        <Book book={book} moveBook={this.moveBook} />
+                                    </li>
+                                ))}
+                            </ol>
                         </div>
                     )}
                     {vazio && (
