@@ -8,7 +8,7 @@ class BooksSearch extends React.Component {
     state = {
         queriedBooks: [],
         query: '',
-        vazio: false
+        empty: false
     }
     
     searchBooks = (string) => {
@@ -18,26 +18,27 @@ class BooksSearch extends React.Component {
 
         if (query) {
             BooksAPI.search(query, 20).then((books) => {
+                console.log(books)
                 if(books.length > 0) {
                     for(let myBook of myBooks) {
                         books.map((b) => { if (b.id === myBook.id) b.shelf = myBook.shelf })
                     }
-                    this.setState({ queriedBooks: books.sort(sortBy('title')), vazio: false })
+                    this.setState({ queriedBooks: books.sort(sortBy('title')), empty: false })
                 } else {
-                    this.setState({ queriedBooks: [], vazio: true })
+                    this.setState({ queriedBooks: [], empty: true })
                 }
             })
         } else {
-            this.setState({ queriedBooks: [], vazio: false })
+            this.setState({ queriedBooks: [], empty: false })
         }
     }
 
     clearQuery= () => {
-        this.searchBooks("")
+        this.setState({ query: '', queriedBooks: [], empty: false })
     }
 
     render() {
-        const { queriedBooks, vazio } = this.state
+        const { queriedBooks, empty } = this.state
         
         return(
             <div className="search-books">
@@ -70,7 +71,7 @@ class BooksSearch extends React.Component {
                             </ol>
                         </div>
                     )}
-                    {vazio && (
+                    {empty && (
                         <h3 className="text-center mt-4">Nenhum livro encontrado.</h3>
                     )}
                 </div>
