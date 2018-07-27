@@ -2,34 +2,38 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
+import * as BooksAPI from './BooksAPI'
+import BookChanger from './BookChanger'
 
 class BooksSearch extends React.Component {
     state = {
-        query: ''
+        books: [],
+        query: '',
+        vazio: false
     }
-
-    updateQuery = (query) => {
-        this.setState({ query: query.trim() })
+    
+    searchBooks = (string) => {
+        const query = string.trim()
+        this.setState({ query: query })
+        
+        if (query) {
+            BooksAPI.search(query, 20).then((books) => {
+                books.length > 0 ? 
+                    this.setState({ books: books.sort(sortBy('title')), vazio: false }) : 
+                    this.setState({ books: [], vazio: true })
+            })
+        } else {
+            this.setState({ books: [], vazio: false })
+        }
     }
 
     clearQuery= () => {
-        this.setState({ query: '' })
+        this.searchBooks("")
     }
 
     render() {
-        const { books } = this.props
-        const { query } = this.state
-
-        let showingBooks
-        if (query) {
-            const match = new RegExp(escapeRegExp(query), 'i')
-            showingBooks = books.filter((book) => match.test(book.title))
-        } else {
-            showingBooks = books
-        }
-
-        showingBooks.sort(sortBy('title'))
-
+        const { books, vazio } = this.state
+        
         return(
             <div className="search-books">
                 <div className="search-books-bar">
@@ -44,28 +48,39 @@ class BooksSearch extends React.Component {
                         you don't find a specific author or title. Every search is limited by search terms.
                         */}
                         <input type="text" placeholder="Search by title or author" 
-                            value={query} onChange={(event) => this.updateQuery(event.target.value)} />
-
+                            value={this.state.query} 
+                            onChange={(event) => this.searchBooks(event.target.value)} />
                     </div>
+                    <div className="clear-search" onClick={this.clearQuery}></div>
                 </div>
-                <div className="search-books-results container">
-                    <div className="row">
-                        {showingBooks.map((book) => (
-                            <div key={book.id} className="col-sm-12 col-md-5 offset-md-1 mt-4 card">
-                                <div className="card-body">
-                                    <div className="row">
-                                        <div className="col-3">
-                                            <img src={book.imageLinks.thumbnail} alt="" className="book-cover-search"/>
-                                        </div>
-                                        <div className="col-9">
-                                            <h5 class="card-title">{book.title}</h5>
-                                            <h6 class="card-subtitle mt-2 text-muted">{book.authors}</h6>
+                <div className="search-books-results container-fluid">
+                    {books.length > 0 && (
+                        <div className="row justify-content-center">
+                            {books.map((book) => (
+                                <div key={book.id} className="col-md-12 col-lg-5 mr-4 mt-4 card">
+                                    <div className="card-body">
+                                        <div className="row">
+                                            <div className="col-3">
+                                                <img alt="" className="book-cover-search"
+                                                    src={book.imageLinks && book.imageLinks !== undefined ? book.imageLinks.thumbnail : ''} />
+                                            </div>
+                                            <div className="col-9">
+                                                <h5 className="card-title">{book.title}</h5>
+                                                <div className="row">
+                                                    <h6 className="card-subtitle mt-2 text-muted col-8">{book.authors}</h6>
+
+                                                    <BookChanger className="col-4" book={book} moveBook={this.props.moveBook} />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    )}
+                    {vazio && (
+                        <h3 className="text-center mt-4">Nenhum livro encontrado.</h3>
+                    )}
                 </div>
             </div>
         )

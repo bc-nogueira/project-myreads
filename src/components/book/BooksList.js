@@ -1,8 +1,32 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import * as BooksAPI from './BooksAPI'
 import Bookshelf from './Bookshelf'
 
 class BooksList extends React.Component {
+    state = {
+        books: []
+    }
+
+    componentDidMount() {
+        BooksAPI.getAll().then((books) => {
+            this.setState({ books })
+        })
+    }
+
+    moveBook = (book, shelf) => {
+        if (book.shelf !== shelf) {
+            book.shelf = shelf
+            BooksAPI.update(book, shelf).then(() => {
+                this.setState((state) => ({
+                    books: this.state.books.filter((b) => b.id !== book.id).concat([book])
+                }))
+            })
+        } else {
+            alert("O livro já se encontra nesta prateleira!")
+        }
+    }
+
     render() {
         return(
             <div className="list-books">
@@ -11,9 +35,12 @@ class BooksList extends React.Component {
                 </div>
                 <div className="list-books-content">
                     <div>
-                        <Bookshelf title="Currently Reading" books={this.props.booksReading} moveBook={this.props.moveBook} />
-                        <Bookshelf title="Want to Read" books={this.props.booksWantToRead} moveBook={this.props.moveBook} />
-                        <Bookshelf title="Read" books={this.props.booksRead} moveBook={this.props.moveBook} />
+                        <Bookshelf title="Currently Reading" moveBook={this.moveBook} 
+                            books={this.state.books.filter(book => book.shelf === "currentlyReading")} />
+                        <Bookshelf title="Want to Read" moveBook={this.moveBook}  
+                            books={this.state.books.filter(book => book.shelf === "wantToRead")} />
+                        <Bookshelf title="Read" moveBook={this.moveBook}  
+                            books={this.state.books.filter(book => book.shelf === "read")} /> />
                     </div>
                 </div>
                 <div className="open-search">
