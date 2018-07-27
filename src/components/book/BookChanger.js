@@ -1,9 +1,16 @@
 import React from 'react'
 
 class BookChanger extends React.Component {
+    chooseBGImage() {
+        let name = "book-shelf-changer"
+        if(typeof this.props.book.shelf !== "undefined")
+            name = name.concat(" update-img")
+        return name
+    }
+
     render() {
         return(
-            <div className="book-shelf-changer">
+            <div className={this.chooseBGImage()}>
                 <select value={this.props.book.shelf} onChange={(event) => this.props.moveBook(this.props.book, event.target.value)}>
                     <option value="move" disabled>Move to...</option>
                     <option value="currentlyReading">Currently Reading</option>
