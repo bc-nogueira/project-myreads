@@ -6,23 +6,29 @@ import Book from './Book'
 
 class BooksSearch extends React.Component {
     state = {
-        books: [],
+        queriedBooks: [],
         query: '',
         vazio: false
     }
     
     searchBooks = (string) => {
         const { query } = this.state
+        const { myBooks } = this.props
         this.setState({ query: string })
 
         if (query) {
             BooksAPI.search(query, 20).then((books) => {
-                books.length > 0 ? 
-                    this.setState({ books: books.sort(sortBy('title')), vazio: false }) : 
-                    this.setState({ books: [], vazio: true })
+                if(books.length > 0) {
+                    for(let myBook of myBooks) {
+                        books.map((b) => { if (b.id === myBook.id) b.shelf = myBook.shelf })
+                    }
+                    this.setState({ queriedBooks: books.sort(sortBy('title')), vazio: false })
+                } else {
+                    this.setState({ queriedBooks: [], vazio: true })
+                }
             })
         } else {
-            this.setState({ books: [], vazio: false })
+            this.setState({ queriedBooks: [], vazio: false })
         }
     }
 
@@ -30,21 +36,8 @@ class BooksSearch extends React.Component {
         this.searchBooks("")
     }
 
-    moveBook = (book, shelf) => {
-        if (book.shelf !== shelf) {
-            book.shelf = shelf
-            BooksAPI.update(book, shelf).then(() => {
-                this.setState((state) => ({
-                    books: this.state.books.filter((b) => b.id !== book.id).concat([book])
-                }))
-            })
-        } else {
-            alert("O livro já se encontra nesta prateleira!")
-        }
-    }
-
     render() {
-        const { books, vazio } = this.state
+        const { queriedBooks, vazio } = this.state
         
         return(
             <div className="search-books">
@@ -66,12 +59,12 @@ class BooksSearch extends React.Component {
                     <div className="clear-search" onClick={this.clearQuery}></div>
                 </div>
                 <div className="search-books-results">
-                    {books.length > 0 && (
+                    {queriedBooks.length > 0 && (
                         <div className="bookshelf-books">
                             <ol className="books-grid">
-                                {books.map((book) => (
+                                {queriedBooks.map((book) => (
                                     <li key={book.id}>
-                                        <Book book={book} moveBook={this.moveBook} />
+                                        <Book book={book} moveBook={this.props.moveBook} />
                                     </li>
                                 ))}
                             </ol>
