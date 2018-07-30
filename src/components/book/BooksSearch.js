@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import sortBy from 'sort-by'
+import { DelayInput } from 'react-delay-input'
 import * as BooksAPI from './BooksAPI'
 import Book from './Book'
 
@@ -10,18 +11,17 @@ class BooksSearch extends React.Component {
         query: '',
         empty: false
     }
-    
-    searchBooks = (string) => {
-        const { query } = this.state
-        const { myBooks } = this.props
-        this.setState({ query: string })
 
-        if (query) {
+    searchBooks = (event) => {
+        const { myBooks } = this.props
+        const query = event.target.value
+        this.setState({ query: query })
+
+        if (query && query.length > 0) {
             BooksAPI.search(query, 20).then((books) => {
-                console.log(books)
                 if(books.length > 0) {
                     for(let myBook of myBooks) {
-                        books.map((b) => { if (b.id === myBook.id) b.shelf = myBook.shelf })
+                        books.forEach((b) => { if (b.id === myBook.id) b.shelf = myBook.shelf })
                     }
                     this.setState({ queriedBooks: books.sort(sortBy('title')), empty: false })
                 } else {
@@ -53,9 +53,9 @@ class BooksSearch extends React.Component {
                         However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                         you don't find a specific author or title. Every search is limited by search terms.
                         */}
-                        <input type="text" placeholder="Search by title or author" 
-                            value={this.state.query} 
-                            onChange={(event) => this.searchBooks(event.target.value)} />
+                        <DelayInput type="text" placeholder="Search by title or author" 
+                            value={this.state.query} delayTimeout={100}
+                            onChange={(event) => this.searchBooks(event)} />
                     </div>
                     <div className="clear-search" onClick={this.clearQuery}></div>
                 </div>
