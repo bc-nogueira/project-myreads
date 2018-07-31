@@ -1,33 +1,33 @@
-import React from 'react'
-import { Route } from 'react-router-dom'
-import * as BooksAPI from './utils/BooksAPI'
-import BooksLibrary from './components/book/BooksLibrary'
-import BooksSearch from './components/book/BooksSearch'
-import './App.css'
+import React from 'react';
+import { Route } from 'react-router-dom';
+import * as BooksAPI from './utils/BooksAPI';
+import BooksLibrary from './components/book/BooksLibrary';
+import BooksSearch from './components/book/BooksSearch';
+import './App.css';
 
 class BooksApp extends React.Component {
   state = {
       myBooks: []
-  }
+  };
 
   componentDidMount() {
       BooksAPI.getAll().then((books) => {
-        this.setState({ myBooks: books })
+        this.setState({ myBooks: books });
       })
-  }
+  };
 
   moveBook = (book, shelf) => {
       if (book.shelf !== shelf) {
-          book.shelf = shelf
+          book.shelf = shelf;
           BooksAPI.update(book, shelf).then(() => {
               this.setState((state) => ({
-                myBooks: this.state.myBooks.filter((b) => b.id !== book.id).concat([book])
-              }))
+                myBooks: this.state.myBooks.filter((b) => b.id !== book.id).concat([book]);
+              }));
           })
       } else {
-          alert("O livro já se encontra nesta prateleira!")
+          alert('O livro já se encontra nesta prateleira!');
       }
-  }
+  };
 
   render() {
     return (
@@ -39,8 +39,8 @@ class BooksApp extends React.Component {
           <BooksSearch myBooks={this.state.myBooks} moveBook={this.moveBook} />
         )} />
       </div>
-    )
-  }
-}
+    );
+  };
+};
 
-export default BooksApp
+export default BooksApp;

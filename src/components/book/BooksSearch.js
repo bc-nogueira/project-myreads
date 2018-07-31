@@ -1,50 +1,50 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import sortBy from 'sort-by'
-import { DelayInput } from 'react-delay-input'
-import * as BooksAPI from './../../utils/BooksAPI'
-import PropTypes from 'prop-types'
-import Book from './Book'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import sortBy from 'sort-by';
+import { DelayInput } from 'react-delay-input';
+import * as BooksAPI from './../../utils/BooksAPI';
+import PropTypes from 'prop-types';
+import Book from './Book';
 
 class BooksSearch extends React.Component {
     static propTypes = {
         myBooks: PropTypes.array.isRequired,
         moveBook: PropTypes.func.isRequired
-    }
+    };
 
     state = {
         queriedBooks: [],
         query: '',
         empty: false
-    }
+    };
 
     searchBooks = (event) => {
-        const { myBooks } = this.props
-        const query = event.target.value
-        this.setState({ query: query })
+        const { myBooks } = this.props;
+        const query = event.target.value;
+        this.setState({ query: query });
 
         if (query && query.length > 0) {
             BooksAPI.search(query, 20).then((books) => {
                 if(books.length > 0) {
                     for(let myBook of myBooks) {
-                        books.forEach((b) => { if (b.id === myBook.id) b.shelf = myBook.shelf })
+                        books.forEach((b) => { if (b.id === myBook.id) b.shelf = myBook.shelf });
                     }
-                    this.setState({ queriedBooks: books.sort(sortBy('title')), empty: false })
+                    this.setState({ queriedBooks: books.sort(sortBy('title')), empty: false });
                 } else {
-                    this.setState({ queriedBooks: [], empty: true })
+                    this.setState({ queriedBooks: [], empty: true });
                 }
             })
         } else {
-            this.setState({ queriedBooks: [], empty: false })
+            this.setState({ queriedBooks: [], empty: false });
         }
-    }
+    };
 
     clearQuery= () => {
-        this.setState({ query: '', queriedBooks: [], empty: false })
-    }
+        this.setState({ query: '', queriedBooks: [], empty: false });
+    };
 
     render() {
-        const { queriedBooks, empty } = this.state
+        const { queriedBooks, empty } = this.state;
         
         return(
             <div className="search-books">
@@ -74,8 +74,8 @@ class BooksSearch extends React.Component {
                     )}
                 </div>
             </div>
-        )
-    }
-}
+        );
+    };
+};
 
-export default BooksSearch
+export default BooksSearch;

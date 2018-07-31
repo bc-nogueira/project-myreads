@@ -1,28 +1,28 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import Modal from 'react-responsive-modal'
-import Rating from 'react-rating'
+import React from 'react';
+import PropTypes from 'prop-types';
+import Modal from 'react-responsive-modal';
+import Rating from 'react-rating';
 
 class BookInfo extends React.Component {
     static propTypes = {
         book: PropTypes.object.isRequired
-    }
+    };
 
     state = {
         open: false
-    }
+    };
 
     onOpenModal = () => {
-        this.setState({ open: true })
-    }
+        this.setState({ open: true });
+    };
 
     onCloseModal = () => {
-        this.setState({ open: false })
-    }
+        this.setState({ open: false });
+    };
 
     render() {
-        const { open } = this.state
-        const { book } = this.props
+        const { open } = this.state;
+        const { book } = this.props;
 
         return (
             <div>
@@ -70,7 +70,7 @@ class BookInfo extends React.Component {
                                 )}
                             </div>
                             <div className="col-sm-12 offset-md-1 col-md-8">
-                                <h5>{book.authors ? book.authors.join(", ") : 'Sem autor conhecido'}</h5>
+                                <h5>{book.authors ? book.authors.join(', ') : 'Sem autor conhecido'}</h5>
                                 {book.publisher && (
                                     <h6>Publisher: {book.publisher}</h6>
                                 )}
@@ -85,8 +85,8 @@ class BookInfo extends React.Component {
                     </div>
                 </Modal>
             </div>
-        )
-    }
-}
+        );
+    };
+};
 
-export default BookInfo
+export default BookInfo;

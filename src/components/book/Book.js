@@ -1,16 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import BookInfo from './BookInfo'
-import BookChanger from './BookChanger'
+import React from 'react';
+import PropTypes from 'prop-types';
+import BookInfo from './BookInfo';
+import BookChanger from './BookChanger';
 
 class Book extends React.Component {
     static propTypes = {
         book: PropTypes.object.isRequired,
         moveBook: PropTypes.func.isRequired
-    }
+    };
 
     render() {
-        const { book } = this.props
+        const { book } = this.props;
 
         return (
             <div className="book">
@@ -24,11 +24,11 @@ class Book extends React.Component {
                 </div>
                 <div className="book-title">{book.title}</div>
                 <div className="book-authors">
-                    {book.authors ? book.authors.join(", ") : 'Sem autor conhecido'}
+                    {book.authors ? book.authors.join(', ') : 'Sem autor conhecido'}
                 </div>
             </div>
-        )
-    }
-}
+        );
+    };
+};
 
-export default Book
+export default Book;
