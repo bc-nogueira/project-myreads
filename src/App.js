@@ -17,16 +17,12 @@ class BooksApp extends React.Component {
   };
 
   moveBook = (book, shelf) => {
-      if (book.shelf !== shelf) {
-          book.shelf = shelf;
-          BooksAPI.update(book, shelf).then(() => {
-              this.setState((state) => ({
-                myBooks: this.state.myBooks.filter((b) => b.id !== book.id).concat([book])
-              }));
-          })
-      } else {
-          alert('O livro já se encontra nesta prateleira!');
-      }
+      book.shelf = shelf;
+      BooksAPI.update(book, shelf).then(() => {
+          this.setState((state) => ({
+            myBooks: this.state.myBooks.filter((b) => b.id !== book.id).concat([book])
+          }));
+      })
   };
 
   render() {
