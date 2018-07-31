@@ -54,7 +54,7 @@ class BooksSearch extends React.Component {
                         you don't find a specific author or title. Every search is limited by search terms.
                         */}
                         <DelayInput type="text" placeholder="Search by title or author" 
-                            value={this.state.query} delayTimeout={100}
+                            value={this.state.query} delayTimeout={300}
                             onChange={(event) => this.searchBooks(event)} />
                     </div>
                     <div className="clear-search" onClick={this.clearQuery}></div>
