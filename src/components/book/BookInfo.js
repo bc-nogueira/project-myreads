@@ -23,9 +23,11 @@ class BookInfo extends React.Component {
             <div>
                 <div className="book-info" onClick={this.onOpenModal}></div>
                 <Modal open={open} onClose={this.onCloseModal} center>
-                    <div className="teste">
+                    <div>
                         <h3>{book.title}</h3>
-                        <h5>{book.subtitle}</h5>
+                        {book.subtitle && (
+                            <h5>{book.subtitle}</h5>
+                        )}
                         <hr/>
                         <div className="row">
                             <div className="col-sm-12 col-md-3">
