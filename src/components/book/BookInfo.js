@@ -1,8 +1,13 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Modal from 'react-responsive-modal'
 import Rating from 'react-rating'
 
 class BookInfo extends React.Component {
+    static propTypes = {
+        book: PropTypes.object.isRequired
+    }
+
     state = {
         open: false
     }

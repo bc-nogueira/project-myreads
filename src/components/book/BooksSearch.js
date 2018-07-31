@@ -3,9 +3,15 @@ import { Link } from 'react-router-dom'
 import sortBy from 'sort-by'
 import { DelayInput } from 'react-delay-input'
 import * as BooksAPI from './BooksAPI'
+import PropTypes from 'prop-types'
 import Book from './Book'
 
 class BooksSearch extends React.Component {
+    static propTypes = {
+        myBooks: PropTypes.array.isRequired,
+        moveBook: PropTypes.func.isRequired
+    }
+
     state = {
         queriedBooks: [],
         query: '',

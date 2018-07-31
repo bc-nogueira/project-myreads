@@ -1,8 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import BookShelf from './BookShelf'
 
-class BooksList extends React.Component {
+class BooksLibrary extends React.Component {
+    static propTypes = {
+        myBooks: PropTypes.array.isRequired,
+        moveBook: PropTypes.func.isRequired
+    }
+
     render() {
         const { myBooks, moveBook } = this.props
 
@@ -14,11 +20,11 @@ class BooksList extends React.Component {
                 <div className="list-books-content">
                     <div>
                         <BookShelf title="Currently Reading" moveBook={moveBook} 
-                            books={myBooks.filter(book => book.shelf === "currentlyReading")} />
+                            myBooks={myBooks.filter(book => book.shelf === "currentlyReading")} />
                         <BookShelf title="Want to Read" moveBook={moveBook}  
-                            books={myBooks.filter(book => book.shelf === "wantToRead")} />
+                            myBooks={myBooks.filter(book => book.shelf === "wantToRead")} />
                         <BookShelf title="Read" moveBook={moveBook}  
-                            books={myBooks.filter(book => book.shelf === "read")} /> />
+                            myBooks={myBooks.filter(book => book.shelf === "read")} /> />
                     </div>
                 </div>
                 <div className="open-search">
@@ -29,4 +35,4 @@ class BooksList extends React.Component {
     }
 }
 
-export default BooksList
+export default BooksLibrary

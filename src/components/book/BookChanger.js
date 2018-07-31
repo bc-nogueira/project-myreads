@@ -1,6 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 class BookChanger extends React.Component {
+    static propTypes = {
+        book: PropTypes.object.isRequired,
+        moveBook: PropTypes.func.isRequired
+    }
+
     chooseBGImage() {
         let name = "book-shelf-changer"
         if(typeof this.props.book.shelf !== "undefined" || this.props.book.shelf === "none")
