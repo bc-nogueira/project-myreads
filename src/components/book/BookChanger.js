@@ -3,7 +3,7 @@ import React from 'react'
 class BookChanger extends React.Component {
     chooseBGImage() {
         let name = "book-shelf-changer"
-        if(typeof this.props.book.shelf !== "undefined")
+        if(typeof this.props.book.shelf !== "undefined" || this.props.book.shelf === "none")
             name = name.concat(" update-img")
         return name
     }
