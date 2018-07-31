@@ -1,4 +1,5 @@
 import React from 'react'
+import BookInfo from './BookInfo'
 import BookChanger from './BookChanger'
 
 class Book extends React.Component {
@@ -8,6 +9,7 @@ class Book extends React.Component {
         return (
             <div className="book">
                 <div className="book-top">
+                    <BookInfo book={book} />
                     <div className="book-cover" style={{ width: 128, height: 193, 
                             backgroundImage: `url(${book.imageLinks && book.imageLinks !== undefined ? 
                                                     book.imageLinks.thumbnail : 
