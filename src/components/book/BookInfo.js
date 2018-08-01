@@ -62,8 +62,6 @@ class BookInfo extends React.Component {
                                 {book.categories && (
                                     <div className="row">
                                         {book.categories.map((category, index) => (
-                                            // Eu sei que usar o index como key não é legal.
-                                            // Mas fiquei sem saber o que usar aqui já que categoria não possui ID
                                             <span key={index} className="badge badge-pill badge-primary">{category}</span>
                                         ))}
                                     </div>

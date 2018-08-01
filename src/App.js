@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import * as BooksAPI from './utils/BooksAPI';
 import BooksLibrary from './components/book/BooksLibrary';
 import BooksSearch from './components/book/BooksSearch';
@@ -13,16 +14,22 @@ class BooksApp extends React.Component {
   componentDidMount() {
       BooksAPI.getAll().then((books) => {
         this.setState({ myBooks: books });
-      })
+      }).catch(() => {
+        Swal('Oops...', 'Erro ao carregar livros.', 'error')
+      });
   };
 
   moveBook = (book, shelf) => {
-      book.shelf = shelf;
-      BooksAPI.update(book, shelf).then(() => {
-          this.setState((state) => ({
-            myBooks: this.state.myBooks.filter((b) => b.id !== book.id).concat([book])
-          }));
-      })
+    const updatedBook = {
+      ...book,
+      shelf
+    }
+
+    BooksAPI.update(updatedBook, shelf).then(() => {
+        this.setState((state) => ({
+          myBooks: this.state.myBooks.filter((b) => b.id !== updatedBook.id).concat([updatedBook])
+        }));
+    })
   };
 
   render() {
