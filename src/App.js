@@ -17,7 +17,7 @@ class BooksApp extends React.Component {
         this.setState({ myBooks: books });
         this.setState({ loading: false });
       }).catch(() => {
-        Swal('Oops...', 'Erro ao carregar livros.', 'error')
+        Swal('Oops...', 'Erro ao carregar livros.', 'error');
         this.setState({ loading: false });
       });
   };
@@ -30,8 +30,12 @@ class BooksApp extends React.Component {
 
     BooksAPI.update(updatedBook, shelf).then(() => {
         this.setState((state) => ({
-          myBooks: this.state.myBooks.filter((b) => b.id !== updatedBook.id).concat([updatedBook])
+            myBooks: this.state.myBooks.filter((b) => b.id !== updatedBook.id).concat([updatedBook])
         }));
+        if(shelf === "none")
+          Swal('Sucesso', 'O livro foi removido das suas prateleiras.', 'success');
+        else
+          Swal('Sucesso', 'O livro foi movido.', 'success');
     })
   };
 
