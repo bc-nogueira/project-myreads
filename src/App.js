@@ -31,16 +31,31 @@ class BooksApp extends React.Component {
       shelf
     }
 
-    BooksAPI.update(updatedBook, shelf).then(() => {
+    if(shelf !== 'none')
+      this.changeShelf(updatedBook);
+    else
+      this.removeFromShelfs(updatedBook);
+  }
+
+  changeShelf = (updatedBook) => {
+    BooksAPI.update(updatedBook, updatedBook.shelf).then(() => {
         this.setState((state) => ({
-            myBooks: this.state.myBooks.filter((b) => b.id !== updatedBook.id).concat([updatedBook])
+          myBooks: this.state.myBooks.filter((b) => b.id !== updatedBook.id).concat([updatedBook])
         }));
-        if(shelf === "none")
-          Swal('Sucesso', 'O livro foi removido das suas prateleiras.', 'success');
-        else
-          Swal('Sucesso', 'O livro foi movido.', 'success');
-    })
+
+        Swal('Sucesso', 'O livro foi movido.', 'success');
+    });
   };
+
+  removeFromShelfs = (removedBook) => {
+    BooksAPI.update(removedBook, removedBook.shelf).then(() => {
+      this.setState(() => ({
+        myBooks: this.state.myBooks.filter((b) => b.id !== removedBook.id)
+      }));
+
+      Swal('Sucesso', 'O livro foi removido das suas prateleiras.', 'success');
+    });
+  }
 
   render() {
     return (
