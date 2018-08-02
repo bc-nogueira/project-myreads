@@ -12,15 +12,18 @@ class BooksApp extends React.Component {
       loading: true
   };
 
-  componentDidMount() {
-      BooksAPI.getAll().then((books) => {
-        this.setState({ myBooks: books });
-        this.setState({ loading: false });
-      }).catch(() => {
-        Swal('Oops...', 'Erro ao carregar livros.', 'error');
-        this.setState({ loading: false });
+  async componentDidMount() {
+    try {
+      const myBooks = await BooksAPI.getAll();
+      this.setState({
+        myBooks,
+        loading: false,
       });
-  };
+    } catch (e) {
+      Swal('Oops...', 'Erro ao carregar livros.', 'error')
+      this.setState({ loading: false });
+    }
+  }
 
   moveBook = (book, shelf) => {
     const updatedBook = {
